@@ -78,9 +78,4 @@ namespace _24HrProject_Data
 
     }//end of class IdentityUserRoleConfiguration
 
-
-
-
-
-
 }//end of namespace _24HourProject.Data
