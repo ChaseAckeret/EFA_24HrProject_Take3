@@ -1,4 +1,7 @@
-﻿using System.Security.Claims;
+﻿using System.Data.Entity;
+using System.Data.Entity.ModelConfiguration;
+using System.Data.Entity.ModelConfiguration.Conventions;
+using System.Security.Claims;
 using System.Threading.Tasks;
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.EntityFramework;
@@ -24,10 +27,60 @@ namespace _24HrProject_Data
             : base("DefaultConnection", throwIfV1Schema: false)
         {
         }
-        
+
         public static ApplicationDbContext Create()
         {
             return new ApplicationDbContext();
-        }
-    }
-}
+        }//end of method Create
+
+        public DbSet<Post> Posts { get; set; }
+        public DbSet<Comment> Comments { get; set; } //Check if we need this??
+
+        protected override void OnModelCreating(DbModelBuilder modelBuilder)
+        {
+
+            modelBuilder
+                .Conventions
+                .Remove<PluralizingTableNameConvention>();
+
+            modelBuilder
+                .Configurations
+                .Add(new IdentityUserLoginConfiguration())
+                .Add(new IdentityUserRoleConfiguration());
+
+        }//end of class onModelCReating
+
+
+    }//end of class applicationDbContext
+
+    public class IdentityUserLoginConfiguration : EntityTypeConfiguration<IdentityUserLogin>
+    {
+        public IdentityUserLoginConfiguration()
+        {
+
+            HasKey(iul => iul.UserId);
+
+        }//end of constructor
+
+
+    }//end of class IdentityUserLoginConfiguration
+
+    public class IdentityUserRoleConfiguration : EntityTypeConfiguration<IdentityUserRole>
+    {
+
+        public IdentityUserRoleConfiguration()
+        {
+
+            HasKey(iur => iur.UserId);
+
+        }//end of constructor
+
+
+    }//end of class IdentityUserRoleConfiguration
+
+
+
+
+
+
+}//end of namespace _24HourProject.Data
